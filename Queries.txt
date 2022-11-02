@@ -1,0 +1,63 @@
+/*Query 1: Who are the top ten customers?*/
+
+SELECT  (C.FirstName || " " || C.LastName) AS CustomerName, SUM(Il.UnitPrice * Il.Quantity) AS TotalPurchase
+FROM Customer AS C JOIN Invoice AS I 
+ON C.CustomerId = I.CustomerId JOIN InvoiceLine AS IL
+ON I.InvoiceId = Il.InvoiceId
+GROUP BY 1
+ORDER BY 2 DESC
+LIMIT 10;
+
+
+
+/*Query 2:What are the counts of each Media Types that have a track length above the averge length of all tracks?*/
+
+SELECT  (C.FirstName || " " || C.LastName) AS CustomerName, SUM(Il.UnitPrice * Il.Quantity) AS TotalPurchase,
+CASE WHEN SUM(Il.UnitPrice * Il.Quantity)> 40 THEN 'Top'
+WHEN SUM(Il.UnitPrice * Il.Quantity)<= 40 AND SUM(Il.UnitPrice * Il.Quantity) >=38 THEN 'Medium'
+ELSE 'Low'
+END AS CustomerRating
+FROM Customer AS C JOIN Invoice AS I 
+ON C.CustomerId = I.CustomerId JOIN InvoiceLine AS IL
+ON I.InvoiceId = Il.InvoiceId
+GROUP BY 1;
+
+
+
+/*Query 3: What are the top ten Rock bands?*/
+
+SELECT Ar.ArtistId, Ar.Name , COUNT(*) AS Songs
+FROM Genre AS Ge JOIN Track AS Tr
+ON Ge.GenreId = Tr.GenreId JOIN Album AS Al
+ON Tr.AlbumId = Al.AlbumId JOIN Artist Ar
+ON Al.ArtistId = Ar.ArtistId
+WHERE Ge.Name = 'Rock'
+GROUP BY 1, 2
+ORDER BY 3 DESC
+LIMIT 10;
+
+
+
+/*Query 4: What is the rating of customers based on thier total purchase?*/
+
+SELECT  (C.FirstName || " " || C.LastName) AS CustomerName, SUM(Il.UnitPrice * Il.Quantity) AS TotalPurchase,
+CASE WHEN SUM(Il.UnitPrice * Il.Quantity)> 40 THEN 'Top'
+WHEN SUM(Il.UnitPrice * Il.Quantity)<= 40 AND SUM(Il.UnitPrice * Il.Quantity) >=38 THEN 'Medium'
+ELSE 'Low'
+END AS CustomerRating
+FROM Customer AS C JOIN Invoice AS I 
+ON C.CustomerId = I.CustomerId JOIN InvoiceLine AS IL
+ON I.InvoiceId = Il.InvoiceId
+GROUP BY 1;
+
+
+
+/*Query 5: Which countries have the highest total purchase?*/
+
+SELECT  C.Country, ROUND(SUM(Il.UnitPrice * Il.Quantity)) AS TotalPurchase
+FROM Customer AS C JOIN Invoice AS I 
+ON C.CustomerId = I.CustomerId JOIN InvoiceLine AS IL
+ON I.InvoiceId = Il.InvoiceId
+GROUP BY 1
+ORDER BY 2 DESC
+LIMIT 10;
